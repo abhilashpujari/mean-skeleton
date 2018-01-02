@@ -1,0 +1,25 @@
+{
+  "name": "meanapp",
+  "version": "1.0.0",
+  "description": "Mean App Practice",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcryptjs": "*",
+    "bluebird": "^3.5.1",
+    "body-parser": "*",
+    "cors": "*",
+    "express": "*",
+    "jsonwebtoken": "*",
+    "lodash": "^4.17.4",
+    "mongoose": "*",
+    "passport": "*",
+    "passport-jwt": "*"
+  },
+  "author": "Abhilash Pujari",
+  "license": "ISC",
+  "devDependencies": {}
+}

@@ -3,7 +3,6 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const router = express.Router();
-const auth = require("../config/passport")();
 const jwtConfig = require('../config/jwt');
 const common_helper = require("../helpers/common-helper")();
 
@@ -12,26 +11,23 @@ const common_helper = require("../helpers/common-helper")();
  */
 exports.register = function (req, res) {
     var user = new User(),
-        email = req.body.email,
-        password = req.body.password;
+        email = req.body.email;
 
     user.email = email;
+    user.password = req.body.password;
     user.username = common_helper.getUsernameFromEmail(email);
     user.name = common_helper.getNameFromUsername(user.username);
-    user.setPassword(password);
 
     user.save(function(err, user) {
         if (err) {
-            res.send({
-                success  : false,
-                message : 'Failed to create user'
-            });
-        } else {
-            res.send({
-                success  : true,
-                message : 'User created Successfully'
-            });
+            throw err;
         }
+
+        res.send({
+            success  : true,
+            message : 'User created Successfully'
+        });
+
     });
 };
 
@@ -45,14 +41,11 @@ exports.authenticate = function (req, res) {
 
     User.findOne(query, function(err, user) {
         if (err) {
-            res.send({
-                success : false,
-                message : 'Invalid User'
-            });
+            throw err;
         }
 
         if (user) {
-            if (user.comparePassword(password, user.password)) {
+            if (user.validatePassword(password)) {
                 const token = jwt.sign({data : user}, jwtConfig.jwtSecret, {
                     expiresIn: 604800  /* 1 week */
                 });

@@ -31,14 +31,24 @@ const UserSchema = new Schema({
     }
 });
 
+UserSchema.pre('save', function(next) {
+    if(this.password) {
+        var salt = bcrypt.genSaltSync(10);
+        this.password = bcrypt.hashSync(this.password, salt);
+        next();
+    } else {
+        next();
+    }
+});
+
 // encrypts the given password
 UserSchema.methods.setPassword = function(password) {
     var salt = bcrypt.genSaltSync(10);
     this.password = bcrypt.hashSync(password, salt);
 };
 
-UserSchema.methods.comparePassword = function(password, hash) {
-    return bcrypt.compareSync(password, hash);
+UserSchema.methods.validatePassword = function(password) {
+    return bcrypt.compareSync(password, this.password);
 };
 
 const User = module.exports = mongoose.model('User', UserSchema);

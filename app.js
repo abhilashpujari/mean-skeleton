@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 const dbConfig = require('./config/database');
 const apiConfig = require('./config/api');
-const auth = require("./config/passport.js")();
+const auth = require("./middlewares/passport")();
 
 const app = express();
 
@@ -15,10 +15,7 @@ const app = express();
 const port = process.env.port || 3000;
 
 // make bluebird default Promise
-Promise = require('bluebird');
-
-// plugin bluebird promise in mongoose
-mongoose.Promise = Promise;
+mongoose.Promise = require('bluebird');
 
 // Connect To Database
 mongoose.connect(dbConfig.dbpath, {
@@ -35,7 +32,7 @@ mongoose.connection.on('error', function(err) {
     console.log('Database error: '+ err);
 });
 
-const users = require('./routes/users');
+const userRouter = require('./routes/user');
 
 // CORS Middleware
 app.use(cors());
@@ -51,7 +48,7 @@ app.use(bodyParser.json());
 app.use(auth.initialize());
 app.use(auth.session());
 
-app.use(apiConfig.apiPrefix + '/user', users);
+app.use(apiConfig.apiPrefix + '/user', userRouter);
 
 // Index Route
 app.get('/', function(req, res) {

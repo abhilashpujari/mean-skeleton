@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const router = express.Router();
 const jwtConfig = require('../config/jwt');
-const common_helper = require("../helpers/common-helper")();
+const commonHelper = require("../helpers/common-helper")();
 
 /**
  * Create an user
@@ -15,8 +15,8 @@ exports.register = function (req, res) {
 
     user.email = email;
     user.password = req.body.password;
-    user.username = common_helper.getUsernameFromEmail(email);
-    user.name = common_helper.getNameFromUsername(user.username);
+    user.username = commonHelper.getUsernameFromEmail(email);
+    user.name = commonHelper.ucFirst(user.username);
 
     user.save(function(err, user) {
         if (err) {

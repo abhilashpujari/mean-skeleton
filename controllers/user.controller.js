@@ -20,37 +20,41 @@ exports.register = function (req, res) {
 
     user.save(function(err, user) {
         if (err) {
-            throw err;
+            res.json({
+                success  : false,
+                message : 'Failed to register user'
+            });
+        } else {
+            res.json({
+                success  : true,
+                message : 'User created Successfully'
+            });
         }
-
-        res.send({
-            success  : true,
-            message : 'User created Successfully'
-        });
-
     });
-};
+}
 
 /**
  * Authenticate user
  */
 exports.authenticate = function (req, res) {
-    var username = req.body.username,
+    var username = req.body.email,
         password = req.body.password,
-        query = {username : username};
+        query = {email : email};
 
     User.findOne(query, function(err, user) {
-        if (err) {
-            throw err;
-        }
+        if (err) throw err;
 
         if (user) {
             if (user.validatePassword(password)) {
-                const token = jwt.sign({data : user}, jwtConfig.jwtSecret, {
-                    expiresIn: 604800  /* 1 week */
-                });
+                const token = jwt.sign(
+                    {data : user},
+                    jwtConfig.jwtSecret,
+                    {
+                        expiresIn: 604800  /* 1 week */
+                    }
+                );
 
-                res.send({
+                res.json({
                     success : true,
                     token : token,
                     user : {
@@ -61,28 +65,28 @@ exports.authenticate = function (req, res) {
                     }
                 });
             } else {
-                res.send({
+                res.json({
                     success : false,
                     message : 'Invalid password'
                 });
             }
         } else {
-            res.send({
+            res.json({
                 success : false,
                 message : 'Invalid User'
             });
         }
     });
-};
+}
 
 /**
  * Get User Profile
  */
 exports.profile = function (req, res) {
-    res.send({
+    res.json({
         'id' : req.user.id,
         'username' : req.user.username,
         'name' : req.user.name,
         'email' : req.user.email
     });
-};
+}

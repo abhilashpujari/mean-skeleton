@@ -23,7 +23,7 @@ To run Backend api
 ```
 cd mean-skeleton
 npm install  
-npm start 
+npm run start 
 
 ```
 

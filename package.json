@@ -1,7 +1,7 @@
 {
   "name": "meanapp",
   "version": "1.0.0",
-  "description": "Mean App Practice",
+  "description": "Mean App Skeleton",
   "main": "app.js",
   "scripts": {
     "start": "node app",

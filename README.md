@@ -8,7 +8,7 @@ Mean App Quickstart Base Skeleton
 * [MongoDB](https://www.mongodb.org/downloads)
 * [Node 6.x](https://nodejs.org/en/download/)
 * [Angular5](https://angular.io/guide/quickstart)
-* npm 3.x ( or yarn)
+* npm
 
 ### Installing
 
